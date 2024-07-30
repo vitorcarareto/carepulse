@@ -1,10 +1,13 @@
 "use client";
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Control } from "react-hook-form";
-import { FormFieldType } from "./forms/PatientForm";
+import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
+import { Control } from "react-hook-form";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { FormFieldType } from "./forms/PatientForm";
 
 interface CustomProps {
   control: Control<any>;
@@ -33,6 +36,21 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             <Input placeholder={placeholder} {...field} className="shad-input border-0"></Input>
           </FormControl>
         </div>
+      );
+    case FormFieldType.PHONE_INPUT:
+      return (
+        <FormControl>
+          <PhoneInput
+            defaultCountry="US"
+            placeholder={placeholder}
+            international
+            withCountryCallingCode
+            value={field.value as E164Number | undefined}
+            onChange={field.onChange}
+            className="input-phone"
+            {...field}
+          />
+        </FormControl>
       );
     default:
       break;
